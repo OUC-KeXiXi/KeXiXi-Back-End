@@ -1,0 +1,25 @@
+# PyCharm
+.idea
+
+# MacOS
+.DS_Store
+
+# Byte-compiled
+__pycache__/
+
+# SQLite
+*.sqlite3
+
+# logs
+/logs
+
+# configuration
+conf.json
+
+# static
+/static
+/media
+
+# django
+migrations
+!migrations/__init__.py
