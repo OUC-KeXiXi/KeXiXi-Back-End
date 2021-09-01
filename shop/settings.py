@@ -129,3 +129,6 @@ STATIC_ROOT = './static/'
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = './media/'
+
+# 图片文件的最大大小 5 MB
+IMAGE_MAX_SIZE = 5 * 1024 * 1024
