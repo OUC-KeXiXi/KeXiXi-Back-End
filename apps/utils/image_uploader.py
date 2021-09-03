@@ -1,3 +1,5 @@
+import imghdr
+
 from apps.utils.decorator import RequiredMethod, Protect
 from apps.utils.response_processor import process_response
 from apps.utils.response_status import ResponseStatus
@@ -22,6 +24,10 @@ def upload(request):
     with open(path, 'wb') as f:
         for chunk in img.chunks():
             f.write(chunk)
+
+    with open(path, 'rb') as f:
+        if imghdr.what(f) not in settings.SUPPORTED_IMAGE_FORMAT:
+            return process_response(request, ResponseStatus.UNSUPPORTED_IMAGE_FORMAT)
 
     request.data = {
         'path': '/' + path

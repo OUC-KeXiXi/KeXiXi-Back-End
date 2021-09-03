@@ -16,6 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from apps.utils.image_uploader import upload
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    path('api/upload', upload),
 ]

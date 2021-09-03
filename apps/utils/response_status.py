@@ -26,6 +26,8 @@ class ResponseStatus(Enum):
     MISSING_PARAMETER_ERROR = (40002, '缺少参数')
     BAD_PARAMETER_ERROR = (40003, '参数错误')
 
+    UNSUPPORTED_IMAGE_FORMAT = (41001, '不支持当前图片格式')
+
     USERNAME_TOO_SHORT_ERROR = (42001, '用户名应不少于 4 位')
     USERNAME_TOO_LONG_ERROR = (42002, '用户名应不多于 20 位')
     USERNAME_FORMAT_ERROR = (42003, '用户名仅能含有字母、数字和下划线')
