@@ -37,3 +37,8 @@ class ResponseStatus(Enum):
     PASSWORD_LACK_NUMBER_ERROR = (42007, '密码必须包含数字')
     PASSWORD_LACK_LETTER_ERROR = (42008, '密码必须包含字母')
     EMAIL_FORMAT_ERROR = (42009, '邮箱格式错误')
+    USERNAME_EXISTED_ERROR = (42010, '用户名已存在')
+    EMAIL_EXISTED_ERROR = (42011, '邮箱已存在')
+    USERNAME_NOT_EXISTED_ERROR = (42012, '用户名不存在')
+    PASSWORD_NOT_MATCH_ERROR = (42013, '密码错误')
+    VERIFICATION_CODE_NOT_MATCH_ERROR = (42014, '验证码不匹配')

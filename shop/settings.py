@@ -144,3 +144,48 @@ MEDIA_ROOT = './media/'
 IMAGE_MAX_SIZE = 5 * 1024 * 1024
 
 SUPPORTED_IMAGE_FORMAT = ['png', 'gif', 'jpeg', 'bmp']
+
+# Email Configuration
+
+EMAIL_HOST = config.get('EMAIL_HOST')
+EMAIL_PORT = config.get('EMAIL_PORT')
+EMAIL_HOST_USER = config.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config.get('EMAIL_HOST_PASSWORD')
+EMAIL_USE_SSL = config.get('EMAIL_USE_SSL')
+EMAIL_USE_TLS = config.get('EMAIL_USE_TLS')
+EMAIL_FROM = EMAIL_HOST_USER
+
+
+# Cache Redis config
+
+REDIS_PASSWORD = config.get('REDIS_PASSWORD')
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            'CONNECTION_POOL_KWARGS': {
+                'max_connections': 100,
+                'decode_responses': True
+            },
+            'PASSWORD': REDIS_PASSWORD
+        }
+    }
+}
+
+VERIFICATION_CODE_MAIL_MESSAGE = """
+以下是你的验证码:
+{code}
+
+{email}，你好！
+我们收到了来自您的 KeXiXi 账号进行验证的安全请求。请使用上面的验证码进行验证。
+请注意：该验证码将于 10 分钟后过期，请尽快验证。
+
+KeXiXi
+"""
+
+SECOND = 1
+MINUTE = SECOND * 60
+HOUR = MINUTE * 60
+DAY = HOUR * 24
