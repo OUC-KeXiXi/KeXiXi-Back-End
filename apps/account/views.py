@@ -1,6 +1,7 @@
 import json
 
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import make_password, check_password
+from django.db.models import Q
 from django_redis import get_redis_connection
 
 from apps.utils.decorator import RequiredMethod, Protect
@@ -71,5 +72,33 @@ def register(request):
 
     account_info = account_models.AccountInfo(account=account)
     account_info.save()
+
+    return process_response(request, ResponseStatus.OK)
+
+
+@Protect
+@RequiredMethod('POST')
+def login(request):
+    request_data = json.loads(request.body)
+
+    username = request_data.get('username')
+    if not username:
+        return process_response(request, ResponseStatus.MISSING_PARAMETER_ERROR)
+
+    password = request_data.get('password')
+    if not password:
+        return process_response(request, ResponseStatus.MISSING_PARAMETER_ERROR)
+
+    if request.session.get('username', None):
+        return process_response(request, ResponseStatus.OK)
+
+    account = account_models.Account.objects.filter(Q(username=username) | Q(email=username)).first()
+    if not account:
+        return process_response(request, ResponseStatus.USERNAME_NOT_EXISTED_ERROR)
+
+    if check_password(password, account.password) is False:
+        return process_response(request, ResponseStatus.PASSWORD_NOT_MATCH_ERROR)
+
+    request.session['username'] = account.username
 
     return process_response(request, ResponseStatus.OK)
