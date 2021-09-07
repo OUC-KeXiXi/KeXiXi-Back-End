@@ -111,3 +111,34 @@ def logout(request):
     del request.session['username']
 
     return process_response(request, ResponseStatus.OK)
+
+
+@Protect
+@RequiredMethod('GET')
+def get_status(request):
+    if request.session.get('username') is not None:
+        username = request.session.get('username')
+
+        account = account_models.Account.objects.filter(username=username).first()
+        if not account:
+            return process_response(request, ResponseStatus.UNEXPECTED_ERROR)
+
+        request.data = {
+            'login': True,
+            'username': account.username,
+            'email': account.email,
+            'role': account.role,
+            'nickname': account.info.nickname,
+            'avatar': account.info.avatar,
+        }
+
+        if int(account.role) == AccountRole.Seller:
+            request.data['balance'] = '{}.{}'.format(account.info.balance_integer, account.info.balance_decimal)
+
+        return process_response(request, ResponseStatus.OK)
+    else:
+        request.data = {
+            'login': False,
+        }
+
+        return process_response(request, ResponseStatus.OK)
