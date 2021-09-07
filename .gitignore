@@ -21,4 +21,4 @@ conf.json
 /media
 
 # django
-**/migrations/*_initial.py
+**/migrations/0*.py
