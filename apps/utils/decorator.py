@@ -46,3 +46,19 @@ def RequiredMethod(method: Union[str, list]):
         return wrapper
 
     return decorator
+
+
+def LoginRequired(func):
+    """
+    要求登陆装饰器
+    """
+    @wraps(func)
+    def wrapper(request):
+        print(request.session.get('username', None))
+        if request.session.get('username', None) is None:
+            return process_response(request, ResponseStatus.NOT_LOGIN)
+
+        # 正常处理
+        return func(request)
+
+    return wrapper

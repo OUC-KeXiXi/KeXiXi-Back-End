@@ -4,7 +4,7 @@ from django.contrib.auth.hashers import make_password, check_password
 from django.db.models import Q
 from django_redis import get_redis_connection
 
-from apps.utils.decorator import RequiredMethod, Protect
+from apps.utils.decorator import RequiredMethod, Protect, LoginRequired
 from apps.utils.validator import validate_username, validate_password, validate_email
 from apps.utils.response_status import ResponseStatus
 from apps.utils.response_processor import process_response
@@ -100,5 +100,14 @@ def login(request):
         return process_response(request, ResponseStatus.PASSWORD_NOT_MATCH_ERROR)
 
     request.session['username'] = account.username
+
+    return process_response(request, ResponseStatus.OK)
+
+
+@Protect
+@RequiredMethod('POST')
+@LoginRequired
+def logout(request):
+    del request.session['username']
 
     return process_response(request, ResponseStatus.OK)

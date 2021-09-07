@@ -42,3 +42,5 @@ class ResponseStatus(Enum):
     USERNAME_NOT_EXISTED_ERROR = (42012, '用户名不存在')
     PASSWORD_NOT_MATCH_ERROR = (42013, '密码错误')
     VERIFICATION_CODE_NOT_MATCH_ERROR = (42014, '验证码不匹配')
+
+    NOT_LOGIN = (43001, '未登陆')
