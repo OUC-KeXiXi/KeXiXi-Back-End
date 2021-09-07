@@ -142,3 +142,23 @@ def get_status(request):
         }
 
         return process_response(request, ResponseStatus.OK)
+
+
+@Protect
+@RequiredMethod('POST')
+@LoginRequired
+def change_nickname(request):
+    request_data = json.loads(request.body)
+
+    nickname = request_data.get('nickname')
+    if not nickname:
+        return process_response(request, ResponseStatus.MISSING_PARAMETER_ERROR)
+    if len(nickname) > 50:
+        return process_response(request, ResponseStatus.BAD_PARAMETER_ERROR)
+
+    account = account_models.Account.objects.filter(username=request.session.get('username')).first()
+    account_info = account.info
+    account_info.nickname = nickname
+    account_info.save()
+
+    return process_response(request, ResponseStatus.OK)

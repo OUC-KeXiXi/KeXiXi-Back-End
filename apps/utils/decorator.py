@@ -54,7 +54,6 @@ def LoginRequired(func):
     """
     @wraps(func)
     def wrapper(request):
-        print(request.session.get('username', None))
         if request.session.get('username', None) is None:
             return process_response(request, ResponseStatus.NOT_LOGIN)
 
