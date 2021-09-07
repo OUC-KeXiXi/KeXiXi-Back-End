@@ -28,7 +28,7 @@ def verification_code(request):
     if check:
         account = account_models.Account.objects.filter(email=email).first()
         if account:
-            return process_response(request, ResponseStatus.USERNAME_EXISTED_ERROR)
+            return process_response(request, ResponseStatus.EMAIL_EXISTED_ERROR)
 
     code = generate_random_string(6, Pattern.Digits)
     message = settings.VERIFICATION_CODE_MAIL_MESSAGE.format(code=code, email=email)
