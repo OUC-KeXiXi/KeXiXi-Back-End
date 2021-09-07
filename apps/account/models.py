@@ -30,7 +30,7 @@ class Account(models.Model):
 class AccountInfo(models.Model):
     account = models.ForeignKey('account.Account', on_delete=models.PROTECT, verbose_name='用户')
     nickname = models.CharField(max_length=50, verbose_name='昵称', null=False, blank=True, default='')
-    avatar = models.ImageField(upload_to='media', verbose_name='头像', default='/media/default.png')
+    avatar = models.CharField(max_length=50, verbose_name='头像', null=False, blank=False, default='/media/default.png')
 
     balance_integer = models.BigIntegerField(verbose_name='余额整数部分', default=0)
     balance_decimal = models.IntegerField(verbose_name='余额小数部分', default=0)
