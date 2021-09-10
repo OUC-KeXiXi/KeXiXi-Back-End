@@ -24,4 +24,5 @@ urlpatterns = [
     path('logout', views.logout),
     path('status', views.get_status),
     path('change_nickname', views.change_nickname),
+    path('change_avatar', views.change_avatar),
 ]

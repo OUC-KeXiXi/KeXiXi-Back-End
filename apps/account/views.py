@@ -1,4 +1,6 @@
 import json
+import re
+import os
 
 from django.contrib.auth.hashers import make_password, check_password
 from django.db.models import Q
@@ -8,6 +10,7 @@ from apps.utils.decorator import RequiredMethod, Protect, LoginRequired
 from apps.utils.validator import validate_username, validate_password, validate_email
 from apps.utils.response_status import ResponseStatus
 from apps.utils.response_processor import process_response
+from shop import settings
 
 from apps.account import models as account_models
 from apps.account.models import AccountRole
@@ -159,6 +162,25 @@ def change_nickname(request):
     account = account_models.Account.objects.filter(username=request.session.get('username')).first()
     account_info = account.info
     account_info.nickname = nickname
+    account_info.save()
+
+    return process_response(request, ResponseStatus.OK)
+
+
+@Protect
+@RequiredMethod('POST')
+@LoginRequired
+def change_avatar(request):
+    request_data = json.loads(request.body)
+
+    path = request_data.get('path')
+    if len(path) > 50 or path[:7] != '/media/' or re.search(r'\.\.', path) \
+            or not os.path.exists('.' + path):
+        return process_response(request, ResponseStatus.BAD_PARAMETER_ERROR)
+
+    account = account_models.Account.objects.filter(username=request.session.get('username')).first()
+    account_info = account.info
+    account_info.avatar = path
     account_info.save()
 
     return process_response(request, ResponseStatus.OK)
