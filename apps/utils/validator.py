@@ -56,7 +56,7 @@ def validate_email(email: str) -> Union[ResponseStatus, None]:
     :param email: 邮箱
     :return: 返回状态码
     """
-    if not re.search(r'^[0-9a-zA-Z_]{0,19}@[0-9a-zA-Z]{1,13}\.[com,cn,net]{1,3}$', email):
+    if not re.search(r'^[0-9a-zA-Z_]{0,19}@[0-9a-zA-Z.]{1,13}\.[com,cn,net]{1,3}$', email):
         return ResponseStatus.EMAIL_FORMAT_ERROR
 
     return None
