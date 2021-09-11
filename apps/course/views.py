@@ -331,8 +331,45 @@ def get_hottest_courses_list(request):
     return process_response(request, ResponseStatus.OK)
 
 
+@Protect
+@RequiredMethod('GET')
 def get_pinned_courses_list(request):
     courses = course_models.Course.objects.filter(published=True, deleted=False, pinned=True).order_by('-sales', '-id')
+
+    request.data = {
+        'courses': []
+    }
+
+    for course in courses:
+        snapshot = course.get_latest_course()
+
+        request.data['courses'].append({
+            'title': course.title,
+            'seller_id': course.seller.id,
+            'seller_name': course.seller.info.nickname if course.seller.info.nickname else course.seller.username,
+            'published': course.published,
+            'tags': [{'tag_id': tag.id, 'tag_name': tag.name} for tag in course.tags.all()],
+            'deleted': course.deleted,
+            'sales': course.sales,
+            'snapshot_id': snapshot.id,
+            'content': snapshot.content,
+            'cover': snapshot.cover,
+            'price': '.'.join([str(snapshot.price_integer), str(snapshot.price_decimal)]),
+            'create_time': snapshot.create_time.strftime('%Y-%m-%d %H:%M:%S')
+        })
+
+    return process_response(request, ResponseStatus.OK)
+
+
+@Protect
+@RequiredMethod('GET')
+@LoginRequired
+def get_my_courses_list(request):
+    account = account_models.Account.objects.filter(username=request.session.get('username')).first()
+    if int(account.role) != AccountRole.Seller:
+        return process_response(request, ResponseStatus.PERMISSION_DENIED)
+
+    courses = course_models.Course.objects.filter(deleted=False, seller=account.id).order_by('-id')
 
     request.data = {
         'courses': []
