@@ -19,5 +19,7 @@ from . import views
 
 
 urlpatterns = [
-
+    path('place_order', views.place_order),
+    path('get_order_detail', views.get_order_detail),
+    path('pay_order', views.pay_order),
 ]
