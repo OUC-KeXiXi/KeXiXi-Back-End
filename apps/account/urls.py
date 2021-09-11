@@ -25,4 +25,5 @@ urlpatterns = [
     path('status', views.get_status),
     path('change_nickname', views.change_nickname),
     path('change_avatar', views.change_avatar),
+    path('get_account_information', views.get_account_information),
 ]

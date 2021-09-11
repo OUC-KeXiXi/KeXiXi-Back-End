@@ -185,3 +185,24 @@ def change_avatar(request):
     account_info.save()
 
     return process_response(request, ResponseStatus.OK)
+
+
+@Protect
+@RequiredMethod('GET')
+def get_account_information(request):
+    account_id = request.GET.get('account_id')
+    if not account_id:
+        return process_response(request, ResponseStatus.MISSING_PARAMETER_ERROR)
+
+    account = account_models.Account.objects.filter(id=account_id).first()
+    if not account:
+        return process_response(request, ResponseStatus.BAD_PARAMETER_ERROR)
+
+    request.data = {
+        'account_id': account.id,
+        'role': account.role,
+        'nickname': account.info.nickname,
+        'avatar': account.info.avatar,
+    }
+
+    return process_response(request, ResponseStatus.OK)
