@@ -91,6 +91,7 @@ def get_course_detail(request):
     snapshot = course.get_latest_course()
 
     request.data = {
+        'course_id': course.id,
         'title': course.title,
         'seller_id': course.seller.id,
         'seller_name': course.seller.info.nickname if course.seller.info.nickname else course.seller.username,
@@ -122,6 +123,7 @@ def get_snapshot_detail(request):
     course = snapshot.root
 
     request.data = {
+        'course_id': course.id,
         'title': course.title,
         'seller_id': course.seller.id,
         'seller_name': course.seller.info.nickname if course.seller.info.nickname else course.seller.username,
@@ -284,6 +286,7 @@ def get_latest_courses_list(request):
         snapshot = course.get_latest_course()
 
         request.data['courses'].append({
+            'course_id': course.id,
             'title': course.title,
             'seller_id': course.seller.id,
             'seller_name': course.seller.info.nickname if course.seller.info.nickname else course.seller.username,
@@ -314,6 +317,7 @@ def get_hottest_courses_list(request):
         snapshot = course.get_latest_course()
 
         request.data['courses'].append({
+            'course_id': course.id,
             'title': course.title,
             'seller_id': course.seller.id,
             'seller_name': course.seller.info.nickname if course.seller.info.nickname else course.seller.username,
@@ -344,6 +348,7 @@ def get_pinned_courses_list(request):
         snapshot = course.get_latest_course()
 
         request.data['courses'].append({
+            'course_id': course.id,
             'title': course.title,
             'seller_id': course.seller.id,
             'seller_name': course.seller.info.nickname if course.seller.info.nickname else course.seller.username,
@@ -379,6 +384,7 @@ def get_my_courses_list(request):
         snapshot = course.get_latest_course()
 
         request.data['courses'].append({
+            'course_id': course.id,
             'title': course.title,
             'seller_id': course.seller.id,
             'seller_name': course.seller.info.nickname if course.seller.info.nickname else course.seller.username,
