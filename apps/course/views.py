@@ -400,3 +400,26 @@ def get_my_courses_list(request):
         })
 
     return process_response(request, ResponseStatus.OK)
+
+
+@Protect
+@RequiredMethod('GET')
+def get_course_snapshot_list(request):
+    course_id = request.GET.get('course_id')
+    if not course_id:
+        return process_response(request, ResponseStatus.MISSING_PARAMETER_ERROR)
+
+    course = course_models.Course.objects.filter(id=course_id).first()
+    if not course:
+        return process_response(request, ResponseStatus.BAD_PARAMETER_ERROR)
+
+    snapshots = course_models.CourseSnapshot.objects.filter(root=course.id)
+
+    request.data = {
+        'snapshots': []
+    }
+
+    for snapshot in snapshots:
+        request.data['snapshots'].append(snapshot.id)
+
+    return process_response(request, ResponseStatus.OK)
