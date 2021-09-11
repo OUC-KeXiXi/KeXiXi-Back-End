@@ -44,3 +44,4 @@ class ResponseStatus(Enum):
     VERIFICATION_CODE_NOT_MATCH_ERROR = (42014, '验证码不匹配')
 
     NOT_LOGIN = (43001, '未登陆')
+    PERMISSION_DENIED = (43002, '权限不足')
