@@ -45,3 +45,5 @@ class ResponseStatus(Enum):
 
     NOT_LOGIN = (43001, '未登陆')
     PERMISSION_DENIED = (43002, '权限不足')
+
+    ALREADY_IN_CART = (44001, '已在购物车')
