@@ -24,6 +24,7 @@ urlpatterns = [
     path('edit_course', views.edit_course),
     path('delete_course', views.delete_course),
     path('publish_course', views.publish_course),
+    path('unpublish_course', views.unpublish_course),
     path('get_latest_courses_list', views.get_latest_courses_list),
     path('get_hottest_courses_list', views.get_hottest_courses_list),
     path('get_pinned_courses_list', views.get_pinned_courses_list),

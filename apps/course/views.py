@@ -274,6 +274,33 @@ def publish_course(request):
 
 
 @Protect
+@RequiredMethod('POST')
+@LoginRequired
+def unpublish_course(request):
+    account = account_models.Account.objects.filter(username=request.session.get('username')).first()
+    if int(account.role) != AccountRole.Seller:
+        return process_response(request, ResponseStatus.PERMISSION_DENIED)
+
+    request_data = json.loads(request.body)
+
+    course_id = request_data.get('course_id')
+    if not course_id:
+        return process_response(request, ResponseStatus.MISSING_PARAMETER_ERROR)
+
+    course = course_models.Course.objects.filter(id=course_id, deleted=False).first()
+    if not course:
+        return process_response(request, ResponseStatus.BAD_PARAMETER_ERROR)
+
+    if account.id != course.seller.id:
+        return process_response(request, ResponseStatus.PERMISSION_DENIED)
+
+    course.published = False
+    course.save()
+
+    return process_response(request, ResponseStatus.OK)
+
+
+@Protect
 @RequiredMethod('GET')
 def get_latest_courses_list(request):
     courses = course_models.Course.objects.filter(published=True, deleted=False).order_by('-id')
