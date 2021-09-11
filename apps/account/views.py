@@ -127,6 +127,7 @@ def get_status(request):
             return process_response(request, ResponseStatus.UNEXPECTED_ERROR)
 
         request.data = {
+            'account_id': account.id,
             'login': True,
             'username': account.username,
             'email': account.email,
