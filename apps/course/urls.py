@@ -30,4 +30,5 @@ urlpatterns = [
     path('get_pinned_courses_list', views.get_pinned_courses_list),
     path('get_my_courses_list', views.get_my_courses_list),
     path('get_course_snapshot_list', views.get_course_snapshot_list),
+    path('get_all_tags', views.get_all_tags),
 ]

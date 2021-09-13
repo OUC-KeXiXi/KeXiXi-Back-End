@@ -450,3 +450,21 @@ def get_course_snapshot_list(request):
         request.data['snapshots'].append(snapshot.id)
 
     return process_response(request, ResponseStatus.OK)
+
+
+@Protect
+@RequiredMethod('GET')
+def get_all_tags(request):
+    tags = course_models.CourseTag.objects.all()
+
+    request.data = {
+        'tags': []
+    }
+
+    for one in tags:
+        request.data['tags'].append({
+            'tag_id': one.id,
+            'tag_name': one.name
+        })
+
+    return process_response(request, ResponseStatus.OK)
