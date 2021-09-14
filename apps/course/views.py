@@ -468,3 +468,43 @@ def get_all_tags(request):
         })
 
     return process_response(request, ResponseStatus.OK)
+
+
+@Protect
+@RequiredMethod('POST')
+def search(request):
+    request_data = json.loads(request.body)
+
+    content = request_data.get('content')
+    if not content:
+        return process_response(request, ResponseStatus.MISSING_PARAMETER_ERROR)
+
+    tag_id = request_data.get('tag_id')
+    if tag_id:
+        courses = course_models.Course.objects.filter(tags__id=tag_id, title__icontains=content, published=True)
+    else:
+        courses = course_models.Course.objects.filter(title__icontains=content, published=True)
+
+    request.data = {
+        'courses': []
+    }
+    for course in courses:
+        snapshot = course.get_latest_course()
+
+        request.data['courses'].append({
+            'course_id': course.id,
+            'title': course.title,
+            'seller_id': course.seller.id,
+            'seller_name': course.seller.info.nickname if course.seller.info.nickname else course.seller.username,
+            'published': course.published,
+            'tags': [{'tag_id': tag.id, 'tag_name': tag.name} for tag in course.tags.all()],
+            'deleted': course.deleted,
+            'sales': course.sales,
+            'snapshot_id': snapshot.id,
+            'content': snapshot.content,
+            'cover': snapshot.cover,
+            'price': '.'.join([str(snapshot.price_integer), str(snapshot.price_decimal)]),
+            'create_time': snapshot.create_time.strftime('%Y-%m-%d %H:%M:%S')
+        })
+
+    return process_response(request, ResponseStatus.OK)
