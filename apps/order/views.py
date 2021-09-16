@@ -125,3 +125,22 @@ def pay_order(request):
         seller_info.save()
 
     return process_response(request, ResponseStatus.OK)
+
+
+@Protect
+@RequiredMethod('GET')
+@LoginRequired
+def get_my_orders(request):
+    account = account_models.Account.objects.filter(username=request.session.get('username')).first()
+    if int(account.role) != AccountRole.Buyer:
+        return process_response(request, ResponseStatus.PERMISSION_DENIED)
+
+    orders = order_models.Order.objects.filter(buyer=account)
+    request.data = {
+        'orders_id': []
+    }
+
+    for one in orders:
+        request.data['orders_id'].append(one.id)
+
+    return process_response(request, ResponseStatus.OK)

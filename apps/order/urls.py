@@ -22,4 +22,5 @@ urlpatterns = [
     path('place_order', views.place_order),
     path('get_order_detail', views.get_order_detail),
     path('pay_order', views.pay_order),
+    path('get_my_orders', views.get_my_orders),
 ]
