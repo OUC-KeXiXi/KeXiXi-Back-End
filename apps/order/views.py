@@ -98,7 +98,7 @@ def get_order_detail(request):
 
     snapshots = order.get_detail()
     for one in snapshots:
-        request.data['snapshots'].append(one.id)
+        request.data['snapshots'].append(one.snapshot.id)
 
     return process_response(request, ResponseStatus.OK)
 
