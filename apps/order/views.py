@@ -119,6 +119,10 @@ def pay_order(request):
 
     details = order.get_detail()
     for one in details:
+        course = one.snapshot.root
+        course.sales += 1
+        course.save()
+
         seller = one.snapshot.root.seller
         seller_info = seller.info
         seller_info.gain(one.snapshot.price_integer, one.snapshot.price_decimal)
